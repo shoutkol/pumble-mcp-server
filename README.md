@@ -458,49 +458,6 @@ pnpm start
 
 The server runs on stdio transport and communicates with MCP clients via standard input/output.
 
-### Docker Deployment
-
-**Build and run locally:**
-
-```bash
-# Build the image
-docker build -t pumble-mcp-server .
-
-# Run the container
-docker run -e PUMBLE_API_KEY="your-api-key-here" pumble-mcp-server
-```
-
-**Using pre-built images from GitHub Container Registry:**
-
-```bash
-# Pull the image
-docker pull ghcr.io/<your-username>/pumble-mcp-server:latest
-
-# Run the container
-docker run -e PUMBLE_API_KEY="your-api-key-here" ghcr.io/<your-username>/pumble-mcp-server:latest
-```
-
-**Automated Docker builds:**
-
-GitHub Actions automatically builds and pushes Docker images to GitHub Container Registry (ghcr.io) on:
-- Pushes to `main` branch (tagged as `latest`)
-- Version tags (e.g., `v1.0.0`)
-- Pull requests (build only, no push)
-
-Images are available at: `ghcr.io/<your-username>/pumble-mcp-server:<tag>`
-
-### Docker Compose
-
-**Run:**
-
-```bash
-# Set environment variable
-export PUMBLE_API_KEY="your-api-key-here"
-
-# Start the service
-docker-compose up
-```
-
 ### Publishing to npm
 
 To enable `npx` usage, publish the package to npm:
@@ -529,85 +486,31 @@ To enable `npx` usage, publish the package to npm:
 
 **Automated Publishing with GitHub Actions:**
 
-The repository includes GitHub Actions workflows for automated publishing:
+The repository includes a GitHub Actions workflow for automated publishing to npm:
 
 1. **Set up npm token:**
-   - Go to npmjs.com and create an access token
-   - Add it as a secret named `NPM_TOKEN` in your GitHub repository settings (Settings → Secrets and variables → Actions)
+   - Go to https://www.npmjs.com/settings/shoutkol/packages
+   - Create an "Automation" access token
+   - Add it as a secret named `NPM_TOKEN` in your GitHub repository settings:
+     - Go to: Settings → Secrets and variables → Actions
+     - Click "New repository secret"
+     - Name: `NPM_TOKEN`
+     - Value: Your npm automation token
+     - Click "Add secret"
 
 2. **Create a release:**
-   - Create a new release on GitHub with a version tag (e.g., `v1.0.0`)
+   - Go to: https://github.com/shoutkol/pumble-mcp-server/releases/new
+   - Create a new release with a version tag (e.g., `v0.1.0`)
    - The workflow will automatically:
      - Run tests
      - Build the project
-     - Publish to npm
-     - Create a GitHub release
+     - Publish to npm registry at https://www.npmjs.com/settings/shoutkol/packages
 
 3. **Manual trigger:**
    - Go to Actions → Publish to npm → Run workflow
    - Enter the version number and run
 
 The workflow ensures that only tested and built code is published to npm.
-
-### Cloud Deployment Options
-
-#### Railway
-
-1. **Create a Railway account** and new project
-2. **Connect your repository**
-3. **Set environment variable:**
-   - `PUMBLE_API_KEY`: Your Pumble API key
-4. **Configure build command:**
-   ```bash
-   pnpm install && pnpm build
-   ```
-5. **Set start command:**
-   ```bash
-   node dist/index.js
-   ```
-
-#### Render
-
-1. **Create a new Web Service** on Render
-2. **Connect your repository**
-3. **Set environment variables:**
-   - `PUMBLE_API_KEY`: Your Pumble API key
-4. **Build command:**
-   ```bash
-   pnpm install && pnpm build
-   ```
-5. **Start command:**
-   ```bash
-   node dist/index.js
-   ```
-
-#### Fly.io
-
-1. **Install Fly CLI:**
-   ```bash
-   curl -L https://fly.io/install.sh | sh
-   ```
-
-2. **Create `fly.toml`:**
-   ```toml
-   app = "pumble-mcp-server"
-   primary_region = "iad"
-
-   [build]
-     builder = "paketobuildpacks/builder:base"
-
-   [env]
-     PUMBLE_API_KEY = "your-api-key-here"
-
-   [[services]]
-     internal_port = 8080
-     protocol = "tcp"
-   ```
-
-3. **Deploy:**
-   ```bash
-   fly deploy
-   ```
 
 ### Production Considerations
 
@@ -710,16 +613,13 @@ This project uses GitHub Actions for continuous integration and deployment:
 ├── .github/
 │   └── workflows/
 │       ├── ci.yml              # CI workflow
-│       ├── publish-npm.yml    # npm publishing workflow
-│       └── docker.yml         # Docker build workflow
+│       └── publish-npm.yml    # npm publishing workflow
 ├── src/
 │   ├── index.ts               # Main server entry point
 │   ├── pumble-client.ts       # Pumble API client
 │   └── __tests__/
 │       └── index.test.ts      # Test suite
 ├── dist/                      # Compiled JavaScript (generated)
-├── Dockerfile                 # Docker configuration
-├── docker-compose.yml        # Docker Compose configuration
 ├── package.json
 ├── tsconfig.json
 ├── vitest.config.ts          # Vitest configuration
