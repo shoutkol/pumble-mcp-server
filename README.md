@@ -460,7 +460,7 @@ The server runs on stdio transport and communicates with MCP clients via standar
 
 ### Docker Deployment
 
-**Build and run:**
+**Build and run locally:**
 
 ```bash
 # Build the image
@@ -469,6 +469,25 @@ docker build -t pumble-mcp-server .
 # Run the container
 docker run -e PUMBLE_API_KEY="your-api-key-here" pumble-mcp-server
 ```
+
+**Using pre-built images from GitHub Container Registry:**
+
+```bash
+# Pull the image
+docker pull ghcr.io/<your-username>/pumble-mcp-server:latest
+
+# Run the container
+docker run -e PUMBLE_API_KEY="your-api-key-here" ghcr.io/<your-username>/pumble-mcp-server:latest
+```
+
+**Automated Docker builds:**
+
+GitHub Actions automatically builds and pushes Docker images to GitHub Container Registry (ghcr.io) on:
+- Pushes to `main` branch (tagged as `latest`)
+- Version tags (e.g., `v1.0.0`)
+- Pull requests (build only, no push)
+
+Images are available at: `ghcr.io/<your-username>/pumble-mcp-server:<tag>`
 
 ### Docker Compose
 
@@ -485,6 +504,8 @@ docker-compose up
 ### Publishing to npm
 
 To enable `npx` usage, publish the package to npm:
+
+**Manual Publishing:**
 
 1. **Build the project:**
    ```bash
@@ -505,6 +526,28 @@ To enable `npx` usage, publish the package to npm:
    ```bash
    npx -y pumble-mcp-server
    ```
+
+**Automated Publishing with GitHub Actions:**
+
+The repository includes GitHub Actions workflows for automated publishing:
+
+1. **Set up npm token:**
+   - Go to npmjs.com and create an access token
+   - Add it as a secret named `NPM_TOKEN` in your GitHub repository settings (Settings → Secrets and variables → Actions)
+
+2. **Create a release:**
+   - Create a new release on GitHub with a version tag (e.g., `v1.0.0`)
+   - The workflow will automatically:
+     - Run tests
+     - Build the project
+     - Publish to npm
+     - Create a GitHub release
+
+3. **Manual trigger:**
+   - Go to Actions → Publish to npm → Run workflow
+   - Enter the version number and run
+
+The workflow ensures that only tested and built code is published to npm.
 
 ### Cloud Deployment Options
 
