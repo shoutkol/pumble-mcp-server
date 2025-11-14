@@ -581,8 +581,8 @@ This project uses GitHub Actions for continuous integration and deployment:
 ### Setting up Automated Publishing
 
 1. **Create npm access token:**
-   - Go to https://www.npmjs.com/settings/<your-username>/tokens
-   - Create a new "Automation" token
+   - Go to https://www.npmjs.com/settings/shoutkol/packages
+   - Create a new "Automation" access token
    - Copy the token
 
 2. **Add secret to GitHub:**
