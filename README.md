@@ -9,13 +9,40 @@ This MCP server provides integration with Pumble's API, allowing you to send mes
 ## Prerequisites
 
 - Node.js (v18 or higher)
-- pnpm (install with `npm install -g pnpm`)
 - A Pumble API key (see [API Key Setup](#api-key-setup))
 
 ## Installation
 
+### Using npm (Recommended)
+
+The package is published on npm: **[@shoutkol/pumble-mcp-server](https://www.npmjs.com/package/@shoutkol/pumble-mcp-server)**
+
+No installation needed! Use it directly with `npx`:
+
 ```bash
+npx -y @shoutkol/pumble-mcp-server
+```
+
+Or install globally:
+
+```bash
+npm install -g @shoutkol/pumble-mcp-server
+```
+
+### Local Development
+
+For local development and contributing:
+
+```bash
+# Clone the repository
+git clone https://github.com/shoutkol/pumble-mcp-server.git
+cd pumble-mcp-server
+
+# Install dependencies
 pnpm install
+
+# Build the project
+pnpm build
 ```
 
 ## API Key Setup
@@ -35,8 +62,8 @@ The API key can be provided in two ways:
    {
      "mcpServers": {
        "pumble": {
-         "command": "node",
-         "args": ["path/to/pumble-mcp-server/dist/index.js"],
+         "command": "npx",
+         "args": ["-y", "@shoutkol/pumble-mcp-server"],
          "initializationOptions": {
            "apiKey": "your-api-key-here"
          }
@@ -48,6 +75,11 @@ The API key can be provided in two ways:
 2. **Environment Variable**: Set the `PUMBLE_API_KEY` environment variable:
    ```bash
    export PUMBLE_API_KEY="your-api-key-here"
+   ```
+   
+   Then use it with:
+   ```bash
+   npx -y @shoutkol/pumble-mcp-server
    ```
 
 ## Development
