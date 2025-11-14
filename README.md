@@ -576,13 +576,7 @@ This project uses GitHub Actions for continuous integration and deployment:
 2. **Publish to npm (`publish-npm.yml`)**: Runs on releases
    - Runs tests
    - Builds the project
-   - Publishes to npm
-   - Creates GitHub release
-
-3. **Docker (`docker.yml`)**: Builds and pushes Docker images
-   - Builds Docker image on push to main
-   - Pushes to GitHub Container Registry
-   - Tags images with version, branch, and commit SHA
+   - Publishes to npm registry at https://www.npmjs.com/settings/shoutkol/packages
 
 ### Setting up Automated Publishing
 
