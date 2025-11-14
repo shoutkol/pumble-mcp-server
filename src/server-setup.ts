@@ -12,7 +12,7 @@ export function createServer(): Server {
   const server = new Server(
     {
       name: "pumble-mcp-server",
-      version: "1.0.2",
+      version: "1.0.3",
     },
     {
       capabilities: {
@@ -86,7 +86,8 @@ export function createServer(): Server {
               },
               channel: {
                 type: "string",
-                description: "The channel name (use either channel or channelId)",
+                description:
+                  "The channel name (use either channel or channelId)",
               },
               channelId: {
                 type: "string",
@@ -118,11 +119,18 @@ export function createServer(): Server {
               },
               channel: {
                 type: "string",
-                description: "The channel name (use either channel or channelId)",
+                description:
+                  "The channel name (use either channel or channelId)",
               },
               channelId: {
                 type: "string",
                 description: "The channel ID (use either channel or channelId)",
+              },
+              asBot: {
+                type: "boolean",
+                description:
+                  "Whether to send the reply as a bot (default: true)",
+                default: true,
               },
             },
             required: ["text", "messageId"],
@@ -181,7 +189,8 @@ export function createServer(): Server {
               },
               channel: {
                 type: "string",
-                description: "The channel name (use either channel or channelId)",
+                description:
+                  "The channel name (use either channel or channelId)",
               },
               channelId: {
                 type: "string",
@@ -199,7 +208,8 @@ export function createServer(): Server {
             properties: {
               channel: {
                 type: "string",
-                description: "The channel name (use either channel or channelId)",
+                description:
+                  "The channel name (use either channel or channelId)",
               },
               channelId: {
                 type: "string",
@@ -290,11 +300,18 @@ export function createServer(): Server {
         }
 
         case "pumble_send_reply": {
-          const { text, messageId, channel, channelId } = args as {
+          const {
+            text,
+            messageId,
+            channel,
+            channelId,
+            asBot = true,
+          } = args as {
             text: string;
             messageId: string;
             channel?: string;
             channelId?: string;
+            asBot?: boolean;
           };
 
           if (!channel && !channelId) {
@@ -306,6 +323,7 @@ export function createServer(): Server {
             messageId,
             channel,
             channelId,
+            asBot,
           });
 
           return {
@@ -343,7 +361,11 @@ export function createServer(): Server {
             description?: string;
           };
 
-          const result = await client.createChannel({ name, type, description });
+          const result = await client.createChannel({
+            name,
+            type,
+            description,
+          });
 
           return {
             content: [
@@ -481,4 +503,3 @@ export function createServer(): Server {
 
   return server;
 }
-

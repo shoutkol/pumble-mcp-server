@@ -211,6 +211,7 @@ Reply to a specific message in a Pumble channel.
 - `messageId` (string, required): The ID of the message to reply to
 - `channel` (string, optional): The channel name (use either `channel` or `channelId`)
 - `channelId` (string, optional): The channel ID (use either `channel` or `channelId`)
+- `asBot` (boolean, optional): Whether to send the reply as a bot (default: `true`)
 
 **Example:**
 ```json
@@ -219,7 +220,8 @@ Reply to a specific message in a Pumble channel.
   "arguments": {
     "text": "This is a reply",
     "messageId": "65c4ba025f3c124940579c7f",
-    "channel": "general"
+    "channel": "general",
+    "asBot": true
   }
 }
 ```
@@ -728,6 +730,39 @@ The HTTP server uses Streamable HTTP transport, which allows MCP clients to conn
 ```
 
 **Note**: For HTTP transport, set the `PUMBLE_API_KEY` environment variable in the Docker container or pass it via the `Authorization` header.
+
+### Deploying to Docker Hub
+
+1. **Login to Docker Hub**:
+   ```bash
+   docker login
+   ```
+
+2. **Set your Docker Hub username**:
+   ```bash
+   export DOCKER_USERNAME=your-dockerhub-username
+   ```
+
+3. **Build and push using the script**:
+   ```bash
+   ./deploy-dockerhub.sh
+   ```
+
+   Or manually:
+   ```bash
+   # Build the image
+   docker build -t your-username/pumble-mcp-server:latest .
+   
+   # Push to Docker Hub
+   docker push your-username/pumble-mcp-server:latest
+   ```
+
+4. **Run from Docker Hub**:
+   ```bash
+   docker run -p 3000:3000 \
+     -e PUMBLE_API_KEY=your-api-key \
+     your-username/pumble-mcp-server:latest
+   ```
 
 ### Deploying to Google Cloud Run
 

@@ -88,6 +88,7 @@ export class PumbleApiClient {
     channel?: string;
     channelId?: string;
     messageId: string;
+    asBot?: boolean;
   }): Promise<unknown> {
     return this.request("/sendReply", {
       method: "POST",
