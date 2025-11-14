@@ -2,6 +2,8 @@
 
 A Model Context Protocol (MCP) server for Pumble, built with TypeScript using Test-Driven Development (TDD).
 
+**📦 Published on npm:** [@shoutkol/pumble-mcp-server](https://www.npmjs.com/package/@shoutkol/pumble-mcp-server)
+
 ## Overview
 
 This MCP server provides integration with Pumble's API, allowing you to send messages, manage channels, react to messages, and interact with your Pumble workspace through MCP-compatible clients.
