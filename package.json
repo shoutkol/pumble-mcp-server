@@ -1,5 +1,5 @@
 {
-  "name": "pumble-mcp-server",
+  "name": "@shoutkol/pumble-mcp-server",
   "version": "1.0.0",
   "description": "MCP server for Pumble",
   "type": "module",

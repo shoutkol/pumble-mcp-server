@@ -308,13 +308,13 @@ This MCP server can be used with MCP-compatible clients. Configure it in your MC
 Once published to npm, users can run this MCP server directly without installing it:
 
 ```bash
-npx -y pumble-mcp-server
+npx -y @shoutkol/pumble-mcp-server
 ```
 
 Or with an API key:
 
 ```bash
-PUMBLE_API_KEY="your-api-key-here" npx -y pumble-mcp-server
+PUMBLE_API_KEY="your-api-key-here" npx -y @shoutkol/pumble-mcp-server
 ```
 
 ### Claude Desktop
@@ -332,7 +332,7 @@ PUMBLE_API_KEY="your-api-key-here" npx -y pumble-mcp-server
   "mcpServers": {
     "pumble": {
       "command": "npx",
-      "args": ["-y", "pumble-mcp-server"],
+      "args": ["-y", "@shoutkol/pumble-mcp-server"],
       "initializationOptions": {
         "apiKey": "your-pumble-api-key"
       }
@@ -362,7 +362,7 @@ PUMBLE_API_KEY="your-api-key-here" npx -y pumble-mcp-server
   "mcpServers": {
     "pumble": {
       "command": "npx",
-      "args": ["-y", "pumble-mcp-server"],
+      "args": ["-y", "@shoutkol/pumble-mcp-server"],
       "env": {
         "PUMBLE_API_KEY": "your-pumble-api-key"
       }
@@ -388,7 +388,7 @@ PUMBLE_API_KEY="your-api-key-here" npx -y pumble-mcp-server
   "cline.mcpServers": {
     "pumble": {
       "command": "npx",
-      "args": ["-y", "pumble-mcp-server"],
+      "args": ["-y", "@shoutkol/pumble-mcp-server"],
       "env": {
         "PUMBLE_API_KEY": "your-pumble-api-key"
       }
@@ -404,7 +404,7 @@ PUMBLE_API_KEY="your-api-key-here" npx -y pumble-mcp-server
 For other MCP-compatible clients, configure the server using stdio transport:
 
 - **Command**: `npx` (or `node` for local installation)
-- **Args**: `["-y", "pumble-mcp-server"]` (or `["/path/to/dist/index.js"]` for local)
+- **Args**: `["-y", "@shoutkol/pumble-mcp-server"]` (or `["/path/to/dist/index.js"]` for local)
 - **API Key**: Provide via `initializationOptions.apiKey` or `PUMBLE_API_KEY` environment variable
 
 ### Using the Tools
@@ -481,7 +481,7 @@ To enable `npx` usage, publish the package to npm:
 
 4. **Verify it works:**
    ```bash
-   npx -y pumble-mcp-server
+   npx -y @shoutkol/pumble-mcp-server
    ```
 
 **Automated Publishing with GitHub Actions:**
