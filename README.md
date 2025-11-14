@@ -303,16 +303,36 @@ List all users in the workspace.
 
 This MCP server can be used with MCP-compatible clients. Configure it in your MCP client settings to use stdio transport.
 
-### Example MCP Client Configuration
+### Installation via npm (npx)
 
-For Claude Desktop or other MCP clients, add this to your configuration:
+Once published to npm, users can run this MCP server directly without installing it:
 
+```bash
+npx -y pumble-mcp-server
+```
+
+Or with an API key:
+
+```bash
+PUMBLE_API_KEY="your-api-key-here" npx -y pumble-mcp-server
+```
+
+### Claude Desktop
+
+1. **Find your Claude Desktop configuration file:**
+   - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+   - **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+   - **Linux**: `~/.config/Claude/claude_desktop_config.json`
+
+2. **Add the Pumble MCP server configuration:**
+
+**Using npx (Recommended):**
 ```json
 {
   "mcpServers": {
     "pumble": {
-      "command": "node",
-      "args": ["/path/to/pumble-mcp-server/dist/index.js"],
+      "command": "npx",
+      "args": ["-y", "pumble-mcp-server"],
       "initializationOptions": {
         "apiKey": "your-pumble-api-key"
       }
@@ -320,6 +340,281 @@ For Claude Desktop or other MCP clients, add this to your configuration:
   }
 }
 ```
+
+**Using local installation:**
+```json
+{
+  "mcpServers": {
+    "pumble": {
+      "command": "node",
+      "args": ["/absolute/path/to/pumble-mcp-server/dist/index.js"],
+      "initializationOptions": {
+        "apiKey": "your-pumble-api-key"
+      }
+    }
+  }
+}
+```
+
+**Using environment variable:**
+```json
+{
+  "mcpServers": {
+    "pumble": {
+      "command": "npx",
+      "args": ["-y", "pumble-mcp-server"],
+      "env": {
+        "PUMBLE_API_KEY": "your-pumble-api-key"
+      }
+    }
+  }
+}
+```
+
+3. **Restart Claude Desktop** to load the new configuration.
+
+4. **Verify connection:** Open Claude Desktop and check that the Pumble tools are available in the MCP tools list.
+
+### Cline (VS Code Extension)
+
+1. **Install Cline** from the VS Code marketplace.
+
+2. **Open VS Code settings** (Cmd/Ctrl + ,) and search for "Cline".
+
+3. **Add MCP server configuration** in your VS Code settings.json:
+
+```json
+{
+  "cline.mcpServers": {
+    "pumble": {
+      "command": "npx",
+      "args": ["-y", "pumble-mcp-server"],
+      "env": {
+        "PUMBLE_API_KEY": "your-pumble-api-key"
+      }
+    }
+  }
+}
+```
+
+4. **Reload VS Code** to activate the configuration.
+
+### Other MCP Clients
+
+For other MCP-compatible clients, configure the server using stdio transport:
+
+- **Command**: `npx` (or `node` for local installation)
+- **Args**: `["-y", "pumble-mcp-server"]` (or `["/path/to/dist/index.js"]` for local)
+- **API Key**: Provide via `initializationOptions.apiKey` or `PUMBLE_API_KEY` environment variable
+
+### Using the Tools
+
+Once configured, you can use the Pumble tools through your MCP client:
+
+- **Send messages** to channels
+- **Reply to messages** in threads
+- **Add reactions** to messages
+- **Create channels** (public or private)
+- **List channels, users, and messages**
+- **Delete messages**
+
+The tools will appear in your MCP client's tool list and can be invoked through natural language or direct tool calls.
+
+## Deployment
+
+### Local Deployment
+
+**Prerequisites:**
+- Node.js v18 or higher
+- pnpm installed globally
+
+**Steps:**
+
+1. **Clone or download the repository:**
+```bash
+git clone <repository-url>
+cd pumble-mcp-server
+```
+
+2. **Install dependencies:**
+```bash
+pnpm install
+```
+
+3. **Build the project:**
+```bash
+pnpm build
+```
+
+4. **Set up API key:**
+```bash
+export PUMBLE_API_KEY="your-api-key-here"
+```
+
+5. **Run the server:**
+```bash
+pnpm start
+```
+
+The server runs on stdio transport and communicates with MCP clients via standard input/output.
+
+### Docker Deployment
+
+**Build and run:**
+
+```bash
+# Build the image
+docker build -t pumble-mcp-server .
+
+# Run the container
+docker run -e PUMBLE_API_KEY="your-api-key-here" pumble-mcp-server
+```
+
+### Docker Compose
+
+**Run:**
+
+```bash
+# Set environment variable
+export PUMBLE_API_KEY="your-api-key-here"
+
+# Start the service
+docker-compose up
+```
+
+### Publishing to npm
+
+To enable `npx` usage, publish the package to npm:
+
+1. **Build the project:**
+   ```bash
+   pnpm build
+   ```
+
+2. **Login to npm:**
+   ```bash
+   npm login
+   ```
+
+3. **Publish:**
+   ```bash
+   npm publish
+   ```
+
+4. **Verify it works:**
+   ```bash
+   npx -y pumble-mcp-server
+   ```
+
+### Cloud Deployment Options
+
+#### Railway
+
+1. **Create a Railway account** and new project
+2. **Connect your repository**
+3. **Set environment variable:**
+   - `PUMBLE_API_KEY`: Your Pumble API key
+4. **Configure build command:**
+   ```bash
+   pnpm install && pnpm build
+   ```
+5. **Set start command:**
+   ```bash
+   node dist/index.js
+   ```
+
+#### Render
+
+1. **Create a new Web Service** on Render
+2. **Connect your repository**
+3. **Set environment variables:**
+   - `PUMBLE_API_KEY`: Your Pumble API key
+4. **Build command:**
+   ```bash
+   pnpm install && pnpm build
+   ```
+5. **Start command:**
+   ```bash
+   node dist/index.js
+   ```
+
+#### Fly.io
+
+1. **Install Fly CLI:**
+   ```bash
+   curl -L https://fly.io/install.sh | sh
+   ```
+
+2. **Create `fly.toml`:**
+   ```toml
+   app = "pumble-mcp-server"
+   primary_region = "iad"
+
+   [build]
+     builder = "paketobuildpacks/builder:base"
+
+   [env]
+     PUMBLE_API_KEY = "your-api-key-here"
+
+   [[services]]
+     internal_port = 8080
+     protocol = "tcp"
+   ```
+
+3. **Deploy:**
+   ```bash
+   fly deploy
+   ```
+
+### Production Considerations
+
+1. **Security:**
+   - Never commit API keys to version control
+   - Use environment variables or secret management services
+   - Consider using different API keys for development and production
+
+2. **Monitoring:**
+   - Add logging for API calls and errors
+   - Monitor API rate limits
+   - Set up alerts for failures
+
+3. **Performance:**
+   - The server is lightweight and runs on stdio
+   - No HTTP server overhead
+   - Consider connection pooling if handling multiple clients
+
+4. **Scaling:**
+   - MCP servers typically run one instance per client connection
+   - For multiple clients, run multiple instances
+   - Consider using process managers like PM2 for local deployments
+
+### Environment Variables
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `PUMBLE_API_KEY` | Your Pumble API key | Yes |
+
+### Troubleshooting
+
+**Server won't start:**
+- Verify Node.js version (v18+)
+- Check that `dist/index.js` exists (run `pnpm build`)
+- Verify API key is set correctly
+
+**Tools not appearing:**
+- Check MCP client logs for connection errors
+- Verify the server path in configuration is absolute (if using local installation)
+- Ensure the server process has execute permissions
+
+**API errors:**
+- Validate your API key with `pumble_validate_api_key` tool
+- Check API rate limits
+- Verify network connectivity to Pumble API
+
+**Connection issues:**
+- Ensure stdio transport is configured correctly
+- Check that the server process is running
+- Review MCP client logs for detailed error messages
 
 ## Project Structure
 

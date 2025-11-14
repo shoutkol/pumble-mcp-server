@@ -4,6 +4,14 @@
   "description": "MCP server for Pumble",
   "type": "module",
   "main": "dist/index.js",
+  "bin": {
+    "pumble-mcp-server": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
