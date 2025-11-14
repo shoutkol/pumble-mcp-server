@@ -37,13 +37,5 @@
     "typescript": "^5.3.3",
     "undici": "^6.19.0",
     "vitest": "^1.2.0"
-  },
-  "pnpm": {
-    "ignoredBuiltDependencies": [
-      "esbuild"
-    ],
-    "onlyBuiltDependencies": [
-      "esbuild"
-    ]
   }
 }
