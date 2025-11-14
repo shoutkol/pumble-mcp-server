@@ -659,19 +659,70 @@ The workflow ensures that only tested and built code is published to npm.
 - Check that the server process is running
 - Review MCP client logs for detailed error messages
 
+## CI/CD
+
+This project uses GitHub Actions for continuous integration and deployment:
+
+### Workflows
+
+1. **CI (`ci.yml`)**: Runs on every push and pull request
+   - Runs tests
+   - Builds the project
+   - Type checks the code
+
+2. **Publish to npm (`publish-npm.yml`)**: Runs on releases
+   - Runs tests
+   - Builds the project
+   - Publishes to npm
+   - Creates GitHub release
+
+3. **Docker (`docker.yml`)**: Builds and pushes Docker images
+   - Builds Docker image on push to main
+   - Pushes to GitHub Container Registry
+   - Tags images with version, branch, and commit SHA
+
+### Setting up Automated Publishing
+
+1. **Create npm access token:**
+   - Go to https://www.npmjs.com/settings/<your-username>/tokens
+   - Create a new "Automation" token
+   - Copy the token
+
+2. **Add secret to GitHub:**
+   - Go to your repository → Settings → Secrets and variables → Actions
+   - Click "New repository secret"
+   - Name: `NPM_TOKEN`
+   - Value: Your npm token
+   - Click "Add secret"
+
+3. **Create a release:**
+   - Go to Releases → Create a new release
+   - Tag: `v1.0.0` (or your version)
+   - Title: `Release v1.0.0`
+   - Description: Release notes
+   - Click "Publish release"
+   - The workflow will automatically publish to npm
+
 ## Project Structure
 
 ```
 .
+├── .github/
+│   └── workflows/
+│       ├── ci.yml              # CI workflow
+│       ├── publish-npm.yml    # npm publishing workflow
+│       └── docker.yml         # Docker build workflow
 ├── src/
-│   ├── index.ts           # Main server entry point
-│   ├── pumble-client.ts   # Pumble API client
+│   ├── index.ts               # Main server entry point
+│   ├── pumble-client.ts       # Pumble API client
 │   └── __tests__/
-│       └── index.test.ts  # Test suite
-├── dist/                  # Compiled JavaScript (generated)
+│       └── index.test.ts      # Test suite
+├── dist/                      # Compiled JavaScript (generated)
+├── Dockerfile                 # Docker configuration
+├── docker-compose.yml        # Docker Compose configuration
 ├── package.json
 ├── tsconfig.json
-├── vitest.config.ts      # Vitest configuration
+├── vitest.config.ts          # Vitest configuration
 └── README.md
 ```
 
