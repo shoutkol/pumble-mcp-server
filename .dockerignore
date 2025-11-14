@@ -1,0 +1,14 @@
+node_modules
+dist
+.git
+.github
+.vscode
+*.md
+*.test.ts
+*.test.js
+__tests__
+vitest.config.ts
+.env
+.env.local
+*.log
+

@@ -671,6 +671,111 @@ This server integrates with the Pumble API Addon. For more information about the
 
 **Authentication:** All requests use the `Api-Key` header with your generated API key.
 
+## Docker Deployment
+
+This MCP server can be deployed as a Docker container with HTTP/Streamable HTTP transport support, similar to [gitlab-mcp](https://github.com/zereight/gitlab-mcp).
+
+### Building the Docker Image
+
+```bash
+docker build -t pumble-mcp-server .
+```
+
+### Running with Docker
+
+```bash
+docker run -i --rm \
+  -p 3000:3000 \
+  -e PUMBLE_API_KEY=your-api-key \
+  pumble-mcp-server
+```
+
+The server will be available at:
+- **Streamable HTTP endpoint**: `http://localhost:3000/mcp`
+- **Health check**: `http://localhost:3000/health`
+
+### Using HTTP Transport
+
+The HTTP server uses Streamable HTTP transport, which allows MCP clients to connect over HTTP instead of stdio.
+
+#### Claude Desktop Configuration
+
+```json
+{
+  "mcpServers": {
+    "pumble": {
+      "type": "streamable-http",
+      "url": "http://localhost:3000/mcp",
+      "headers": {
+        "Authorization": "Bearer your-api-key"
+      }
+    }
+  }
+}
+```
+
+#### Cline (VS Code) Configuration
+
+```json
+{
+  "cline.mcpServers": {
+    "pumble": {
+      "type": "streamable-http",
+      "url": "http://localhost:3000/mcp"
+    }
+  }
+}
+```
+
+**Note**: For HTTP transport, set the `PUMBLE_API_KEY` environment variable in the Docker container or pass it via the `Authorization` header.
+
+### Deploying to Google Cloud Run
+
+1. **Set environment variables**:
+   ```bash
+   export GCP_PROJECT_ID=your-project-id
+   export PUMBLE_API_KEY=your-api-key
+   ```
+
+2. **Deploy using the script**:
+   ```bash
+   ./deploy-gcp.sh
+   ```
+
+   Or manually:
+   ```bash
+   # Build and push
+   docker build -t gcr.io/YOUR_PROJECT_ID/pumble-api-server .
+   docker push gcr.io/YOUR_PROJECT_ID/pumble-api-server
+   
+   # Deploy to Cloud Run
+   gcloud run deploy pumble-api-server \
+     --image gcr.io/YOUR_PROJECT_ID/pumble-api-server \
+     --platform managed \
+     --region us-central1 \
+     --allow-unauthenticated \
+     --set-env-vars PUMBLE_API_KEY=your-api-key \
+     --port 3000
+   ```
+
+### Running Modes
+
+The server supports two modes:
+
+1. **Stdio Mode** (default): For local MCP clients
+   ```bash
+   pnpm start
+   # or
+   node dist/index.js
+   ```
+
+2. **HTTP Mode**: For remote access and Docker deployment
+   ```bash
+   pnpm start:http
+   # or
+   node dist/http-server.js
+   ```
+
 ## License
 
 MIT
